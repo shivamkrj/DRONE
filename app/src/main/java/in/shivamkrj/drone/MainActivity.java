@@ -91,9 +91,14 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             Intent intent = new Intent(this, LocationActivity.class);
-            intent.putExtra("EMAIL",user.getEmail());
-            startActivity(intent);
-            finish();
+            String email = user.getEmail();
+            if(email==null||email.length()<2){
+
+            }else {
+                intent.putExtra("EMAIL", email);
+                startActivity(intent);
+                finish();
+            }
         } else {
             // No user is signed in
         }
@@ -107,8 +112,9 @@ public class MainActivity extends AppCompatActivity {
         pd.show();
         String username = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        mEmailView.setText("");
+//        mEmailView.setText("");
         mPasswordView.setText("");
+//        FirebaseAuth.getInstance().signOut();
         firebaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

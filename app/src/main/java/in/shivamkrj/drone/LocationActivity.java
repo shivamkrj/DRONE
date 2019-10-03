@@ -3,6 +3,7 @@ package in.shivamkrj.drone;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -47,14 +48,15 @@ public class LocationActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference userReference;
     DatabaseReference adminNotify;
-    EditText latitude;
-    EditText longitude;
-    EditText altitude;
+    TextView latitude;
+    TextView longitude;
+    TextView altitude;
     Button findLocation;
     Button sendLocation;
     Button chat;
     FusedLocationProviderClient client;
     LocationCallback callback;
+    boolean uploadedFlag;
     String lat, lon, alt, accuracy;
     ProgressDialog progressDialog;
     boolean flag,foundFlag;
@@ -64,10 +66,11 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-
+        uploadedFlag = false;
         FirebaseApp.initializeApp(this);
-        emailid = getIntent().getStringExtra("EMAIL");
+//        emailid = getIntent().getStringExtra("EMAIL");
 //        username = emailid.replaceAll(".","k");
+        emailid = "cse.shivamkr@gmail.com";
         findUserName();
         firebaseDatabase = FirebaseReference.getDatabaseInstance();
         userReference = firebaseDatabase.getReference(username);
@@ -116,7 +119,10 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private void startChat() {
-        chat.setVisibility(View.GONE);
+//        chat.setVisibility(View.GONE);
+        Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra("USERNAME",username);
+        startActivity(intent);
     }
 
     private void findUserName() {
@@ -131,7 +137,9 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private void uploadLocation() {
-        Toast.makeText(this, "Sending Location ...", Toast.LENGTH_SHORT).show();
+        Log.d("zzzusername:",username);
+        if(uploadedFlag)
+            return;
         lat = latitude.getText().toString();
         lon = longitude.getText().toString();
         alt = altitude.getText().toString();
@@ -140,10 +148,12 @@ public class LocationActivity extends AppCompatActivity {
         userData.latitude = lat;
         userData.longitude = lon;
         userData.username = emailid;
-        if(flag){
-            
+        if(username==null||username.length()<2){
+            Log.d("zzzusername",username+" -null");
+            return;
         }
-            adminNotify.child(username).setValue(userData);
+        adminNotify.child(username).setValue(userData);
+        uploadedFlag = true;
     }
 
     private boolean fetchLocation() {
@@ -172,6 +182,11 @@ public class LocationActivity extends AppCompatActivity {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         if (locationResult != null) {
+                            if(uploadedFlag){
+                                request.setInterval(50000000);
+                                return;
+                            }
+
                             List<Location> locations = locationResult.getLocations();
                             for (Location location : locations) {
                                 lat = location.getLatitude() + "";
