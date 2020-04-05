@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private String PASSWORD = "abc";
     private String USERNAME = "abc@";
     private FirebaseAuth firebaseAuth;
+    String token;
     SharedPreferences sharedPref;
 
     @Override
@@ -50,9 +51,8 @@ public class MainActivity extends AppCompatActivity {
                             Log.w("fcms", "getInstanceId failed", task.getException());
                             return;
                         }
-
                         // Get new Instance ID token
-                        String token = task.getResult().getToken();
+                        token = task.getResult().getToken();
 
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        FirebaseMessaging.getInstance().subscribeToTopic("drone-vehicle")
+        FirebaseMessaging.getInstance().subscribeToTopic("all-users")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -127,8 +127,9 @@ public class MainActivity extends AppCompatActivity {
     private void login(String username) {
         Intent intent = new Intent(this, LocationActivity.class);
         intent.putExtra("EMAIL", username);
-                startActivity(intent);
-                finish();
+        intent.putExtra("TOKEN",token);
+        startActivity(intent);
+        finish();
     }
 
     private void loginUsingSharedPreference() {
