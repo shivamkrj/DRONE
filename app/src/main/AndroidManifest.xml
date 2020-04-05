@@ -13,8 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LocationActivity"></activity>
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".UsersActivity"></activity>
+        <activity android:name=".ListNgo" />
+        <activity android:name=".Launcher">
+
+        </activity>
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".ChatActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

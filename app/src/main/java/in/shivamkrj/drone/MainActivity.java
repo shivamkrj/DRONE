@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     String token;
     SharedPreferences sharedPref;
+    boolean isDonating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setVisibility(View.GONE);
 
+
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String username = sharedPref.getString("SHIVAMKUMAR","skr");
+        Contact.username = username;
         Toast.makeText(this,username,Toast.LENGTH_SHORT).show();
         if(!username.equals("skr")){
             login(username);
@@ -125,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String username) {
-        Intent intent = new Intent(this, LocationActivity.class);
+        Intent intent = new Intent(this, Launcher.class);
         intent.putExtra("EMAIL", username);
+        Contact.username = username;
         intent.putExtra("TOKEN",token);
         startActivity(intent);
         finish();

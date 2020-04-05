@@ -9,7 +9,7 @@ public class FirebaseReference {
 
         if (INSTANCE == null) {
             INSTANCE = FirebaseDatabase.getInstance();
-            INSTANCE.setPersistenceEnabled(true);
+//            INSTANCE.setPersistenceEnabled(true);
         }
         return INSTANCE;
     }
