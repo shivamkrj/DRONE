@@ -55,6 +55,8 @@ public class LocationActivity extends AppCompatActivity {
     TextView altitude;
     Button findLocation;
     Button sendLocation;
+
+    boolean isDonating = false;
     Button chat;
     FusedLocationProviderClient client;
     LocationCallback callback;
@@ -68,13 +70,16 @@ public class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         FirebaseApp.initializeApp(this);
-        emailid = getIntent().getStringExtra("EMAIL");
+//        emailid = getIntent().getStringExtra("EMAIL");
+        emailid = Contact.username;
 //        username = emailid.replaceAll(".","k");
 //        emailid = "cse.shivamkr@gmail.com";
         findUserName();
         firebaseDatabase = FirebaseReference.getDatabaseInstance();
         userReference = firebaseDatabase.getReference(username);
         adminNotify = firebaseDatabase.getReference("USERS");
+
+        isDonating = !getIntent().getBooleanExtra("isNeed",false);
 
 
         latitude = findViewById(R.id.latitude);
@@ -152,6 +157,7 @@ public class LocationActivity extends AppCompatActivity {
         userData.latitude = lat;
         userData.longitude = lon;
         userData.username = emailid;
+        userData.isDonating = isDonating;
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
