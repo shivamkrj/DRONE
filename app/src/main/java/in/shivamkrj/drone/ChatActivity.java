@@ -37,7 +37,8 @@ public class ChatActivity extends AppCompatActivity {
 //        username = emailid.replaceAll(".","k");
         firebaseDatabase = FirebaseReference.getDatabaseInstance();
 //        userReference = firebaseDatabase.getReference(emailid);
-        adminNotify = firebaseDatabase.getReference("USERS").child(username).child("MESSAGE");
+//        adminNotify = firebaseDatabase.getReference("USERS").child(username).child("MESSAGE");
+        adminNotify = firebaseDatabase.getReference(username);
         editText = findViewById(R.id.editText);
         recyclerView = findViewById(R.id.recycler_view);
         getMessages();

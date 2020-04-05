@@ -40,6 +40,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class LocationActivity extends AppCompatActivity {
@@ -56,7 +58,6 @@ public class LocationActivity extends AppCompatActivity {
     Button chat;
     FusedLocationProviderClient client;
     LocationCallback callback;
-    boolean uploadedFlag;
     String lat, lon, alt, accuracy;
     ProgressDialog progressDialog;
     boolean flag,foundFlag;
@@ -66,11 +67,10 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        uploadedFlag = false;
         FirebaseApp.initializeApp(this);
-//        emailid = getIntent().getStringExtra("EMAIL");
+        emailid = getIntent().getStringExtra("EMAIL");
 //        username = emailid.replaceAll(".","k");
-        emailid = "cse.shivamkr@gmail.com";
+//        emailid = "cse.shivamkr@gmail.com";
         findUserName();
         firebaseDatabase = FirebaseReference.getDatabaseInstance();
         userReference = firebaseDatabase.getReference(username);
@@ -138,8 +138,6 @@ public class LocationActivity extends AppCompatActivity {
 
     private void uploadLocation() {
         Log.d("zzzusername:",username);
-        if(uploadedFlag)
-            return;
         lat = latitude.getText().toString();
         lon = longitude.getText().toString();
         alt = altitude.getText().toString();
@@ -148,18 +146,23 @@ public class LocationActivity extends AppCompatActivity {
         userData.latitude = lat;
         userData.longitude = lon;
         userData.username = emailid;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        String t = formatter.format(date);
+        userData.time = t;
+//        System.out.println(formatter.format(date));
         if(username==null||username.length()<2){
             Log.d("zzzusername",username+" -null");
             return;
         }
         adminNotify.child(username).setValue(userData);
-        uploadedFlag = true;
     }
 
     private boolean fetchLocation() {
 
         foundFlag = false;
-        checkLocationPermission();
+        if(!checkLocationPermission()) return false;
         final LocationRequest request = new LocationRequest();
         request.setInterval(5000);
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -182,10 +185,6 @@ public class LocationActivity extends AppCompatActivity {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         if (locationResult != null) {
-                            if(uploadedFlag){
-                                request.setInterval(50000000);
-                                return;
-                            }
 
                             List<Location> locations = locationResult.getLocations();
                             for (Location location : locations) {
@@ -237,18 +236,6 @@ public class LocationActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 //        progressDialog.show();
 //        client = LocationServices.getFusedLocationProviderClient(this);
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -280,14 +267,15 @@ public class LocationActivity extends AppCompatActivity {
         return true;
     }
 
-    private void checkLocationPermission() {
+    private boolean checkLocationPermission() {
         if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+            {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -301,6 +289,12 @@ public class LocationActivity extends AppCompatActivity {
                                 ActivityCompat.requestPermissions(LocationActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
+                                if (fetchLocation()) {
+                                    latitude.setText(lat);
+                                    longitude.setText(lon);
+                                    altitude.setText(alt);
+                                    Log.d("zzzAccuracy", accuracy + "");
+                                }
                             }
                         })
                         .create()
@@ -308,6 +302,9 @@ public class LocationActivity extends AppCompatActivity {
 
 
             }
+            return false;
         }
+        else
+            return true;
     }
 }

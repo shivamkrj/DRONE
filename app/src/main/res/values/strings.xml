@@ -3,7 +3,7 @@
     <string name="msg_token_fmt">\"Message: %s\"</string>
     <string name="msg_subscribed">\"skr-drone\"</string>
     <string name="msg_subscribe_failed">\"skr-sub-failed\"</string>
-    <string name="prompt_email">Enter your Email id</string>
+    <string name="prompt_email">Enter your Mobile No.</string>
     <string name="prompt_password">Enter Your Password</string>
     <string name="action_sign_in_short">Sign In</string>
 </resources>
