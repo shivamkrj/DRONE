@@ -94,7 +94,7 @@ public class LocationActivity extends AppCompatActivity {
                 if (fetchLocation()) {
                     latitude.setText(lat);
                     longitude.setText(lon);
-                    altitude.setText(alt);
+//                    altitude.setText(alt);
                     Log.d("zzzAccuracy", accuracy + "");
                 }
 //                progressDialog.dismiss();
@@ -107,7 +107,7 @@ public class LocationActivity extends AppCompatActivity {
                     uploadLocation();
                 } else
                     Toast.makeText(LocationActivity.this, "Fetch Location", Toast.LENGTH_SHORT).show();
-                chat.setVisibility(View.VISIBLE);
+//                chat.setVisibility(View.VISIBLE);
             }
         });
         chat.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +141,14 @@ public class LocationActivity extends AppCompatActivity {
         lat = latitude.getText().toString();
         lon = longitude.getText().toString();
         alt = altitude.getText().toString();
+        EditText nameEditText = findViewById(R.id.editText3);
+        String name = nameEditText.getText().toString();
         final UserData userData = new UserData();
-        userData.altitude = alt;
+        userData.name = name;
+        nameEditText = findViewById(R.id.editText4);
+        name = nameEditText.getText().toString();
+        userData.address = name;
+        userData.items = alt;
         userData.latitude = lat;
         userData.longitude = lon;
         userData.username = emailid;
@@ -156,7 +162,18 @@ public class LocationActivity extends AppCompatActivity {
             Log.d("zzzusername",username+" -null");
             return;
         }
-        adminNotify.child(username).setValue(userData);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Uploading your request...");
+        progressDialog.show();
+        adminNotify.child(username).setValue(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                progressDialog.cancel();
+                Toast.makeText(LocationActivity.this,"Your request has been successfully submitted",Toast.LENGTH_LONG).show();
+                onBackPressed();
+            }
+        });
     }
 
     private boolean fetchLocation() {
@@ -194,7 +211,7 @@ public class LocationActivity extends AppCompatActivity {
                                 if(!foundFlag){
                                     latitude.setText(lat);
                                     longitude.setText(lon);
-                                    altitude.setText(alt);
+//                                    altitude.setText(alt);
                                     flag = true;
                                     foundFlag=true;
                                 }

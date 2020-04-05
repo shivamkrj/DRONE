@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DRONE</string>
+    <string name="app_name">Shakti</string>
     <string name="msg_token_fmt">\"Message: %s\"</string>
     <string name="msg_subscribed">\"skr-drone\"</string>
     <string name="msg_subscribe_failed">\"skr-sub-failed\"</string>
