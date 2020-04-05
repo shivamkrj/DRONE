@@ -150,6 +150,7 @@ public class Launcher extends AppCompatActivity {
     }
 
     private void notification() {
-        Toast.makeText(this,"notification  clicked",Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,"notification  clicked",Toast.LENGTH_LONG).show();
+
     }
 }
