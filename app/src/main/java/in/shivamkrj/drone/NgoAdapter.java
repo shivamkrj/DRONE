@@ -14,6 +14,7 @@ public class NgoAdapter extends RecyclerView.Adapter<NgoViewHolder> {
     ArrayList<NgoData> ngoDataArrayList;
     LayoutInflater layoutInflater;
     ViewClickInterface viewClickInterface;
+    boolean isNgo = true;
 
     public NgoAdapter(Context context,ArrayList<NgoData> ngoDataArrayList,ViewClickInterface viewClickInterface){
         this.ngoDataArrayList=ngoDataArrayList;
@@ -41,6 +42,13 @@ public class NgoAdapter extends RecyclerView.Adapter<NgoViewHolder> {
             @Override
             public void onClick(View v) {
                 viewClickInterface.onViewClick(ngoViewHolder.item,ngoViewHolder.getAdapterPosition());
+            }
+        });
+        ngoViewHolder.item.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                viewClickInterface.onLongClick(v,ngoViewHolder.getAdapterPosition());
+                return true;
             }
         });
 
