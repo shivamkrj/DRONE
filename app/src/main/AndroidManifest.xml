@@ -20,7 +20,10 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".Beneficiaries" />
         <activity android:name=".ListNgo" />
+        <activity android:name=".UsersActivity"/>
+        <activity android:name=".LocationActivity"/>
         <activity android:name=".Launcher">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

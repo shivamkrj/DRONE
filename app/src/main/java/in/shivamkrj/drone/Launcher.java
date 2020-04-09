@@ -22,6 +22,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import static in.shivamkrj.drone.Constant.sendGroupPush;
+
 //import com.google.android.gms.common.api.Response;
 //import com.google.firebase.database.core.Constants;
 
@@ -84,8 +86,7 @@ public class Launcher extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //donate/need
-//                selectActionForDonate();
-                Toast.makeText(Launcher.this,"Not for Admin App",Toast.LENGTH_LONG).show();
+                selectActionForDonate();
             }
         });
         sewaTV1 = findViewById(R.id.tv_sewa1);
@@ -99,7 +100,7 @@ public class Launcher extends AppCompatActivity {
         needTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Launcher.this,MainActivity.class);
+                Intent intent = new Intent(Launcher.this,UsersActivity.class);
                 intent.putExtra("isNeed",true);
                 startActivity(intent);
             }
@@ -108,7 +109,7 @@ public class Launcher extends AppCompatActivity {
         donateTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Launcher.this,MainActivity.class);
+                Intent intent = new Intent(Launcher.this,UsersActivity.class);
                 intent.putExtra("isNeed",false);
                 startActivity(intent);
             }
@@ -163,7 +164,7 @@ public class Launcher extends AppCompatActivity {
             public void onClick(View v) {
                 //
                 dialog.dismiss();
-                Intent intent = new Intent(Launcher.this,MainActivity.class);
+                Intent intent = new Intent(Launcher.this,LocationActivity.class);
                 intent.putExtra("isNeed",true);
                 startActivity(intent);
             }
