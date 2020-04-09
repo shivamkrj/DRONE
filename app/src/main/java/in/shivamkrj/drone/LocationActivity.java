@@ -148,16 +148,29 @@ public class LocationActivity extends AppCompatActivity {
         alt = altitude.getText().toString();
         EditText nameEditText = findViewById(R.id.editText3);
         String name = nameEditText.getText().toString();
+        if(name.length()<1){
+            Toast.makeText(this,"Please enter your name to continue",Toast.LENGTH_SHORT).show();
+            return;
+        }
         final UserData userData = new UserData();
         userData.name = name;
         nameEditText = findViewById(R.id.editText4);
         name = nameEditText.getText().toString();
         userData.address = name;
+        if(name.length()<1){
+            Toast.makeText(this,"Please enter your address to continue",Toast.LENGTH_SHORT).show();
+            return;
+        }
         userData.items = alt;
+        if(alt.length()<1){
+            Toast.makeText(this,"Please enter the list of items to continue",Toast.LENGTH_SHORT).show();
+            return;
+        }
         userData.latitude = lat;
         userData.longitude = lon;
         userData.username = emailid;
         userData.isDonating = isDonating;
+
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
@@ -176,6 +189,27 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 progressDialog.cancel();
+                if(isDonating){
+                    String title = "Donator: "+emailid;
+                    String body = "willing to donate the following items: "+userData.items;
+                    Constant.sendGroupPush(LocationActivity.this,title,body);
+                    DatabaseReference notificationReference = firebaseDatabase.getReference("ADMIN-NOTIFICATION");
+                    itemData item = new itemData();
+                    item.data = title+" @ "+body;
+                    item.key = notificationReference.push().getKey();
+                    notificationReference.child(item.key).setValue(item);
+                    System.out.println("notification is added");
+                }else{
+                    String title = "Needy: "+emailid;
+                    String body = "in need of the following items: "+userData.items;
+                    Constant.sendGroupPush(LocationActivity.this,title,body);
+                    DatabaseReference notificationReference = firebaseDatabase.getReference("ADMIN-NOTIFICATION");
+                    itemData item = new itemData();
+                    item.data = title+" @ "+body;
+                    item.key = notificationReference.push().getKey();
+                    notificationReference.child(item.key).setValue(item);
+                    System.out.println("notification is added");
+                }
                 Toast.makeText(LocationActivity.this,"Your request has been successfully submitted",Toast.LENGTH_LONG).show();
                 onBackPressed();
             }
@@ -230,7 +264,7 @@ public class LocationActivity extends AppCompatActivity {
                     }
                 };
                 if (ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(LocationActivity.this,"Requires Permission Request1",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LocationActivity.this,"Requires Location Permission",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 client.requestLocationUpdates(request, callback, null);
@@ -240,7 +274,7 @@ public class LocationActivity extends AppCompatActivity {
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LocationActivity.this,"Requires Permission Request Failure",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this,"Location Permission Request Failure",Toast.LENGTH_SHORT).show();
 
                 if (e instanceof ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
@@ -299,29 +333,38 @@ public class LocationActivity extends AppCompatActivity {
 //            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
 //                    Manifest.permission.ACCESS_FINE_LOCATION)) {
             {
+                ActivityCompat.requestPermissions(LocationActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+                if (fetchLocation()) {
+                    latitude.setText(lat);
+                    longitude.setText(lon);
+                    altitude.setText(alt);
+//                    Log.d("zzzAccuracy", accuracy + "");
+                }
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
-                        .setTitle("Location Permission")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(LocationActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION);
-                                if (fetchLocation()) {
-                                    latitude.setText(lat);
-                                    longitude.setText(lon);
-                                    altitude.setText(alt);
-                                    Log.d("zzzAccuracy", accuracy + "");
-                                }
-                            }
-                        })
-                        .create()
-                        .show();
+//                // Show an explanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//                new AlertDialog.Builder(this)
+//                        .setTitle("Location Permission")
+//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                //Prompt the user once explanation has been shown
+//                                ActivityCompat.requestPermissions(LocationActivity.this,
+//                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                                        MY_PERMISSIONS_REQUEST_LOCATION);
+//                                if (fetchLocation()) {
+//                                    latitude.setText(lat);
+//                                    longitude.setText(lon);
+//                                    altitude.setText(alt);
+//                                    Log.d("zzzAccuracy", accuracy + "");
+//                                }
+//                            }
+//                        })
+//                        .create()
+//                        .show();
 
 
             }

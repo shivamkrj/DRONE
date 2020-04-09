@@ -174,7 +174,7 @@ public class Launcher extends AppCompatActivity {
             public void onClick(View v) {
                 //
                 dialog.dismiss();
-                Intent intent = new Intent(Launcher.this,MainActivity.class);
+                Intent intent = new Intent(Launcher.this,LocationActivity.class);
                 intent.putExtra("isNeed",false);
                 startActivity(intent);
             }
@@ -185,6 +185,9 @@ public class Launcher extends AppCompatActivity {
                 //
                 dialog.dismiss();
                 //webview link for donation using uri
+                Intent intent = new Intent(Launcher.this,About.class);
+                intent.putExtra("url","donate");
+                startActivity(intent);
             }
         });
         dialog = builder.create();
@@ -194,7 +197,7 @@ public class Launcher extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.launcer_menu, menu);
+//        inflater.inflate(R.menu.launcer_menu, menu);
 
         return true;
     }
@@ -211,10 +214,10 @@ public class Launcher extends AppCompatActivity {
     }
 
     private void notification(){
-        Intent i =new Intent(Launcher.this,ItemActivity.class);
-        i.putExtra("title","Notifications");
-        i.putExtra("node","ADMIN-NOTIFICATION");
-        startActivity(i);
+//        Intent i =new Intent(Launcher.this,ItemActivity.class);
+//        i.putExtra("title","Notifications");
+//        i.putExtra("node","ADMIN-NOTIFICATION");
+//        startActivity(i);
 
     }
 }

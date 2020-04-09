@@ -97,7 +97,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                loginToTaskActivity();
                 String s = mEmailView.getText().toString();
-
+                if(s.length()<10||s.length()>13||s.length()==11){
+                    Toast.makeText(MainActivity.this,"Please enter correct Mobile number",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("SHIVAMKUMAR",s);
                 editor.apply();

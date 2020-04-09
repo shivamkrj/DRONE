@@ -160,6 +160,7 @@ public class ItemActivity extends AppCompatActivity {
         recyclerView =findViewById(R.id.recycler_view);
 
         floatingActionButton = findViewById(R.id.add);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -24,6 +24,7 @@ public class About extends AppCompatActivity {
         WebView webView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        String url = getIntent().getStringExtra("url");
         final ProgressDialog pd=new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.setCancelable(false);
@@ -42,8 +43,10 @@ public class About extends AppCompatActivity {
 //                pd.dismiss();
             }
         });
-
-        webView.loadUrl("http://sewa.org.in");
+        if(url=="donate")
+            webView.loadUrl("http://sewa.org.in/donate.php");
+        else
+            webView.loadUrl("http://sewa.org.in");
 
     }
 }
