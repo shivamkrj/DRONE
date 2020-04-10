@@ -20,23 +20,27 @@
         <activity android:name=".ItemActivity"/>
         <activity
             android:name=".About"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".Beneficiaries" />
         <activity android:name=".ListNgo" />
         <activity android:name=".UsersActivity"/>
         <activity android:name=".LocationActivity"/>
-        <activity android:name=".Launcher">
+        <activity android:name=".Launcher"
+            android:theme="@style/AppThemeNoActionBar"/>
 
 
-        </activity>
         <activity android:name=".ChatActivity" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".NoInternetActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

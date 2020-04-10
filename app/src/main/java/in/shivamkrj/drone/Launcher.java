@@ -103,7 +103,7 @@ public class Launcher extends AppCompatActivity {
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
 
-                Toast.makeText(Launcher.this, "fail onAdLoaded() "+i, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Launcher.this, "fail onAdLoaded() "+i, Toast.LENGTH_SHORT).show();
             }
 
             @Override
