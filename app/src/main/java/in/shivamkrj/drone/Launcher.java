@@ -15,6 +15,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -22,10 +25,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import static in.shivamkrj.drone.Constant.sendGroupPush;
+import com.google.android.gms.ads.MobileAds;
 
-//import com.google.android.gms.common.api.Response;
-//import com.google.firebase.database.core.Constants;
+//import com.google.android.gms.ads.
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class Launcher extends AppCompatActivity {
 
@@ -35,10 +38,21 @@ public class Launcher extends AppCompatActivity {
     AlertDialog dialog;
     String FCM_API_KEY;
 
+    private InterstitialAd interstitialAd;
+    AdRequest request;
+    boolean first;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+
+        first=true;
+        googleAd();
+
+
+
+
         findViews();
         FirebaseApp.initializeApp(getApplicationContext());
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -73,11 +87,72 @@ public class Launcher extends AppCompatActivity {
                 });
     }
 
+    private void googleAd() {
+        MobileAds.initialize(this);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-5012406189825580/9223314671");
+        interstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                interstitialAd.loadAd(request);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+
+                Toast.makeText(Launcher.this, "fail onAdLoaded() "+i, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if(first){
+                    interstitialAd.show();
+                    first  = false;
+                }
+
+
+
+            }
+
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+            }
+
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+            }
+        });
+
+        request  =  new AdRequest.Builder()
+                .build();
+        interstitialAd.loadAd(request);
+
+    }
+
     private void findViews() {
         about = findViewById(R.id.about);
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
                 startActivity(new Intent(Launcher.this,About.class));
             }
         });
@@ -118,6 +193,9 @@ public class Launcher extends AppCompatActivity {
         beneficaryTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
                 Intent i =new Intent(Launcher.this,Beneficiaries.class);
                 i.putExtra("title","Beneficiaries");
                 i.putExtra("node","Beneficiaries");
@@ -218,6 +296,8 @@ public class Launcher extends AppCompatActivity {
 //        i.putExtra("title","Notifications");
 //        i.putExtra("node","ADMIN-NOTIFICATION");
 //        startActivity(i);
+        Toast.makeText(this,"notice",Toast.LENGTH_LONG).show();
+
 
     }
 }
