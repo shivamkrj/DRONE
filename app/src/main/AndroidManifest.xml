@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="in.shivamkrj.drone">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -7,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        tools:replace="android:appComponentFactory"
+        android:appComponentFactory="whateverString"
         android:allowBackup="true"
         android:icon="@mipmap/app_icon_round"
         android:label="@string/app_name"
@@ -39,6 +42,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5012406189825580~7989096383"/>
+
     </application>
 
 </manifest>
