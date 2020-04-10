@@ -195,7 +195,7 @@ public class LocationActivity extends AppCompatActivity {
                     Constant.sendGroupPush(LocationActivity.this,title,body);
                     DatabaseReference notificationReference = firebaseDatabase.getReference("ADMIN-NOTIFICATION");
                     itemData item = new itemData();
-                    item.data = title+" @ "+body;
+                    item.data = title+"\nis "+body;
                     item.key = notificationReference.push().getKey();
                     notificationReference.child(item.key).setValue(item);
                     System.out.println("notification is added");
@@ -205,7 +205,7 @@ public class LocationActivity extends AppCompatActivity {
                     Constant.sendGroupPush(LocationActivity.this,title,body);
                     DatabaseReference notificationReference = firebaseDatabase.getReference("ADMIN-NOTIFICATION");
                     itemData item = new itemData();
-                    item.data = title+" @ "+body;
+                    item.data = title+"\nis "+body;
                     item.key = notificationReference.push().getKey();
                     notificationReference.child(item.key).setValue(item);
                     System.out.println("notification is added");
